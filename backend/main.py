@@ -1,4 +1,5 @@
-from socket import socket
+# from socket import socket
+import socket as pysocket
 
 from dotenv import load_dotenv
 
@@ -36,10 +37,11 @@ bookings: list[dict] = []
 @app.get("/test-network")
 def test_network():
     try:
-        ip = socket.gethostbyname("smtp.gmail.com")
+        ip = pysocket.gethostbyname("smtp.gmail.com")
         return {"success": True, "ip": ip}
     except Exception as e:
         return {"success": False, "error": str(e)}
+    
 
 # ── POST /api/bookings ────────────────────────────────────────────────────────
 @app.post("/api/bookings")
