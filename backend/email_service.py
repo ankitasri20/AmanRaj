@@ -7,6 +7,10 @@ from email.mime.text import MIMEText
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
 
+
+print("EMAIL_USER:", EMAIL_USER)
+print("EMAIL_PASS loaded:", EMAIL_PASS is not None)
+
 # Ordered list of all booking fields with human-readable labels
 _FIELD_LABELS = [
     ("name",     "Name"),
@@ -44,10 +48,16 @@ def _field_rows_html(booking: dict) -> str:
     return "\n".join(rows)
 
 
-def _connect() -> smtplib.SMTP_SSL:
-    context = ssl.create_default_context()
-    return smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=10)
+# def _connect() -> smtplib.SMTP_SSL:
+#     context = ssl.create_default_context()
+#     return smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=10)
 
+def _connect():
+    server = smtplib.SMTP("smtp.gmail.com", 587, timeout=20)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    return server
 
 def send_admin_email(booking: dict) -> bool:
     try:
