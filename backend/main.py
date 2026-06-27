@@ -1,3 +1,5 @@
+from socket import socket
+
 from dotenv import load_dotenv
 
 # load_dotenv MUST be called before any module that reads os.getenv at import time
@@ -27,10 +29,17 @@ bookings: list[dict] = []
 
 
 # ── Health check ──────────────────────────────────────────────────────────────
-@app.get("/")
-def health_check():
-    return {"status": "Singer Portfolio Backend Running"}
+# @app.get("/")
+# def health_check():
+#     return {"status": "Singer Portfolio Backend Running"}
 
+@app.get("/test-network")
+def test_network():
+    try:
+        ip = socket.gethostbyname("smtp.gmail.com")
+        return {"success": True, "ip": ip}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 
 # ── POST /api/bookings ────────────────────────────────────────────────────────
 @app.post("/api/bookings")
